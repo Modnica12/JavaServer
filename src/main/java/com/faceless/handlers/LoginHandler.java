@@ -6,8 +6,6 @@ import com.faceless.requests.Request;
 import com.faceless.requests.RequestHandler;
 import com.faceless.responses.Response;
 import com.google.gson.JsonPrimitive;
-import com.mysql.cj.x.protobuf.MysqlxDatatypes;
-import com.mysql.jdbc.ResultSet;
 
 import java.io.IOException;
 

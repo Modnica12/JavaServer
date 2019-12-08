@@ -6,7 +6,7 @@ import java.sql.*;
 
 public class Database
 {
-	private final String     DB_URL   = "jdbc:mysql://localhost?login=root&password=link";
+	private final String     DB_URL   = "jdbc:mysql://localhost?login=root&password=link&useUnicode=yes&characterEncoding=UTF-8";
 	private final String     username = "root";
 	private final String     password = "link";
 	private       Connection connection;
@@ -56,6 +56,9 @@ public class Database
 			Connection        conn      = DriverManager.getConnection(DB_URL, username, password);
 			PreparedStatement stmt      = conn.prepareStatement("CREATE DATABASE IF NOT EXISTS VMDB;");
 			stmt.execute();
+			PreparedStatement stmtUTF      =
+					conn.prepareStatement("ALTER DATABASE VMDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;");
+			stmtUTF.execute();
 			statement = conn.createStatement();
 			connection = conn;
 			System.out.println("Database created successfully...");

@@ -5,6 +5,7 @@ import com.faceless.handlers.*;
 import com.faceless.requests.RequestMapper;
 import com.faceless.sql.Database;
 import org.jsoup.nodes.Document;
+import java.util.Hashtable;
 
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,7 +13,7 @@ import java.net.Socket;
 public class HttpServer
 {
 	private static final int               PORT                = 8080;
-	public final         PropertyContainer propertyContainer   = new PropertyContainer();
+	public final         Hashtable<String, PropertyContainer> propertyContainers   = new Hashtable<>();
 	final                RequestMapper     mapper              = new RequestMapper();
 	public               Document          mainPageDocument    = Utilities.readDocument("mainpage.html");
 	public               Document          loginPageDocument   = Utilities.readDocument("loginpage.html");
@@ -29,16 +30,19 @@ public class HttpServer
 		while (true)
 		{
 			Socket socket = ss.accept();//lock until request accepted
-			System.err.println("[INFO]Client accepted");
-			new Thread(new SocketProcessor(this, socket)).start();//starting new thread to process request
+			System.out.println("[INFO]Client accepted");
+			try {
+				new Thread(new SocketProcessor(this, socket)).start();//starting new thread to process request
+			}
+			catch (java.lang.ArrayIndexOutOfBoundsException e){
+				System.err.println("Write VM name");
+			}
 		}
 	}
 
 	private void loadProperties()
 	{
 		int initialNumber = 25;
-		propertyContainer.setProperty("counter", Integer.toString(initialNumber));
-		propertyContainer.setProperty("logged_in", false);
 		mapper.registerHandler("/", new MainHandler());
 		mapper.registerHandler("/click", new ClickButtonHandler(1));
 		mapper.registerHandler("/unclick", new ClickButtonHandler(-1));

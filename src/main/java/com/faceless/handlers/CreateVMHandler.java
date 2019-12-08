@@ -26,7 +26,6 @@ public class CreateVMHandler extends RequestHandler
 		vm.hdd_volume = request.getArgumentValue("hdd_volume");
 		vm.monitor_enabled = request.getArgumentValue("monitor_enabled");
 		vm.os = request.getArgumentValue("os");
-
 		vm.addToDatabase(login);
 
 		response.setStatus("200");

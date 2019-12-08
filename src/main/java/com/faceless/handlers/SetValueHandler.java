@@ -19,14 +19,14 @@ public class SetValueHandler extends RequestHandler
 
 		String valueName = request.getArguments().keys().nextElement();
 		String value     = request.getArgumentValue(valueName);
-		if (Application.server.propertyContainer.hasProperty(valueName))
+		if (propertyContainer.hasProperty(valueName))
 		{
-			Application.server.propertyContainer.setProperty(valueName, value);
+			propertyContainer.setProperty(valueName, value);
 			response.setStatus("200");
 			response.setDescription("OK");
 			response.setJsonResponse();
 			response.writeResponse("{\n\t\"" + valueName + "\" : \"" +
-								   Application.server.propertyContainer.getProperty(valueName) + "\"\n}");
+								   propertyContainer.getProperty(valueName) + "\"\n}");
 		}
 		else
 		{
