@@ -13,34 +13,6 @@
                 location.href = "/"
             })
         };
-
-        order_vm = function () {
-            let login = document.getElementById("username").innerText;
-            let vm_name = document.getElementById("vm_name").value;
-            let cpu_vendor = document.getElementById("cpu_vendor").value;
-            let cpu_frequency = document.getElementById("cpu_freq").value;
-            let cpu_core_count = document.getElementById("cpu_core_count").value;
-            let ram_volume = document.getElementById("ram_volume").value;
-            let hdd_volume = document.getElementById("hdd_volume").value;
-            let monitor_enabled = document.getElementById("enable_monitor").checked ? "1" : "0";
-            let os = document.getElementById("os").value;
-
-            $.ajax({
-                url: `/ordervm?owner=${login}` +
-                    `&vm_name=${vm_name}` +
-                    `&cpu_vendor=${cpu_vendor}` +
-                    `&cpu_frequency=${cpu_frequency}` +
-                    `&cpu_core_count=${cpu_core_count}` +
-                    `&ram_volume=${ram_volume}` +
-                    `&hdd_volume=${hdd_volume}` +
-                    `&monitor_enabled=${monitor_enabled}` +
-                    `&os=${os}`,
-                type: "PUT"
-            }).done(function (data) {
-                login = data;
-                location.href = "/"
-            })
-        }
     </script>
 </head>
 <body>
@@ -121,7 +93,6 @@
             const ramslider = document.getElementById("ram_volume");
             const ramoutput = document.getElementById("ram_volume_numeric");
             ramoutput.innerHTML = ramslider.value + " GB"; // Display the default slider value
-
             // Update the current slider value (each time you drag the slider handle)
             ramslider.oninput = function () {
                 ramoutput.innerHTML = this.value + " GB";
@@ -137,7 +108,6 @@
             const hddslider = document.getElementById("hdd_volume");
             const hddoutput = document.getElementById("hdd_volume_numeric");
             hddoutput.innerHTML = hddslider.value + " GB"; // Display the default slider value
-
             // Update the current slider value (each time you drag the slider handle)
             hddslider.oninput = function () {
                 hddoutput.innerHTML = this.value + " GB";
@@ -168,7 +138,7 @@
 </div>
 <br>
 <div>
-    <button id="create_vm" onclick="order_vm()">Create VM</button>
+    <button id="create_vm">Create VM</button><!-- TODO -->
 </div>
 </body>
 </html>

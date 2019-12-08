@@ -1,3 +1,0 @@
-write tests
-create web service
-use SQL database
