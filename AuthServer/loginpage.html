@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        returnToMain = function () {
+            $.ajax({
+                url: "/",
+                type: "GET"
+            }).done(function () {
+                location.href = "/"
+            })
+        };
+
+        tryLogin = function () {
+            let login = document.getElementById("login").value;
+            let password = document.getElementById("password").value;
+            if (!login || !password)
+                return false;
+            $.ajax({
+                url: "/login?login=" + login + "&password=" + password,
+                type: "POST"
+            }).done(function (data) {
+                console.log(data);
+                location.href = "/"
+            });
+        }
+    </script>
+</head>
+<body>
+<button onclick="returnToMain()">Return</button>
+<br>
+<br>
+<h2>Login</h2>
+<label>
+    Login
+    <input id="login" type="text">
+</label>
+<label>
+    Password
+    <input id="password" type="password">
+</label>
+<br>
+<br>
+<button onclick="tryLogin()">Login</button>
+</body>
+</html>

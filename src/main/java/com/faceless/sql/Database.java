@@ -49,7 +49,7 @@ public class Database
 		//STEP 2: Register JDBC driver
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		//STEP 3: Open a connection
-		System.out.println("Connecting to database...");
+		System.out.println("Connecting to Vm database...");
 		try
 		{
 			boolean           dbExisted = false;
@@ -61,7 +61,7 @@ public class Database
 			stmtUTF.execute();
 			statement = conn.createStatement();
 			connection = conn;
-			System.out.println("Database created successfully...");
+			System.out.println("Successful connection to VirtualMachine database.");
 
 			CreateVmAndUsersTables c = new CreateVmAndUsersTables(this);
 			c.up();

@@ -18,7 +18,6 @@ public class CreateVmAndUsersTables extends Migration
     public void up() throws SQLException
     {
         database.executeUpdate("USE VMDB;");
-        database.executeUpdate("CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, login VARCHAR(255), password VARCHAR(255));");
         database.executeUpdate("CREATE TABLE IF NOT EXISTS vms (id INT AUTO_INCREMENT PRIMARY KEY,\n" +
                 " owner VARCHAR(255),\n" +
                 " vmname VARCHAR(255),\n" +
@@ -34,7 +33,6 @@ public class CreateVmAndUsersTables extends Migration
     @Override
     public void down() throws SQLException
     {
-        database.executeUpdate("DROP TABLE users");
         database.executeUpdate("DROP TABLE vms");
     }
 }

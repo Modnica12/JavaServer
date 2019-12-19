@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        vbox {
+            display: block;
+            flex-direction: column;
+        }
+
+        hbox {
+            display: block;
+            flex-direction: row;
+        }
+    </style>
+    <script>
+        loginClick = function () {
+            $.ajax({
+                url: "/get?name=logged_in",
+                type: "GET"
+            }).done(function (data) {
+                if (!data)
+                    location.href = "/loginpage";
+                else
+                    $.ajax({
+                        url: "/logout",
+                        type: "POST"
+                    }).done(function () {
+                        location.reload()
+                    });
+            });
+        };
+
+        orderVM = function () {
+            $.ajax({
+                url: "/get?name=logged_in",
+                type: "GET"
+            }).done(function (data) {
+                if (!data)
+                    location.href = "/loginpage";
+                else
+                    location.href = "/vmorderpage"
+            });
+        };
+
+        lookVM = function () {
+            $.ajax({
+                url: "/get?name=logged_in",
+                type: "GET"
+            }).done(function (data) {
+                if (!data)
+                    location.href = "/loginpage";
+                else
+                    location.href = "/vmlookpage"
+            });
+        };
+    </script>
+</head>
+
+<body>
+<div style="border-width: 3px;">
+    <h1>
+        Faceless Lord Virtual Machines
+    </h1>
+</div>
+<div>
+    <div>
+        <button name="vm_order" onclick="orderVM()">Order VM</button>
+        <button name="vm_look" onclick="lookVM()">My VMs</button>
+    </div>
+    <!--suppress HtmlDeprecatedAttribute -->
+    <div style="text-align: right">
+        <div id="username">Nonidentified user</div>
+        <button id="login_button" onclick="loginClick()">Login</button>
+        <script>
+            let value = document.getElementById("username").innerText;
+            console.log(value);
+            $.ajax({
+                url: "/get?name=logged_in",
+                type: "GET"
+            }).done(function (data) {
+                console.log(data);
+                if (data) {
+                    $.ajax({
+                        url: "/get?name=login",
+                        type: "GET"
+                    }).fail(function (data) {//too strange that is fails even status == 200 :/
+                        if (data.status === 200) {
+                            console.log(data);
+                            document.getElementById("username").innerText = data.responseText;
+                            document.getElementById("login_button").innerText = "Log out";
+                        }
+                    });
+                }
+            });
+        </script>
+    </div>
+    <!--<textarea name="value_field"></textarea>-->
+</div>
+</body>
+</html>

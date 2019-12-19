@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order VM</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        returnToMain = function () {
+            $.ajax({
+                url: "/",
+                type: "GET"
+            }).done(function () {
+                location.href = "/"
+            })
+        };
+
+        order_vm = function () {
+            let login = document.getElementById("username").innerText;
+            let vm_name = document.getElementById("vm_name").value;
+            let cpu_vendor = document.getElementById("cpu_vendor").value;
+            let cpu_frequency = document.getElementById("cpu_freq").value;
+            let cpu_core_count = document.getElementById("cpu_core_count").value;
+            let ram_volume = document.getElementById("ram_volume").value;
+            let hdd_volume = document.getElementById("hdd_volume").value;
+            let monitor_enabled = document.getElementById("enable_monitor").checked ? "1" : "0";
+            let os = document.getElementById("os").value;
+
+            $.ajax({
+                url: `/ordervm?owner=${login}` +
+                    `&vm_name=${vm_name}` +
+                    `&cpu_vendor=${cpu_vendor}` +
+                    `&cpu_frequency=${cpu_frequency}` +
+                    `&cpu_core_count=${cpu_core_count}` +
+                    `&ram_volume=${ram_volume}` +
+                    `&hdd_volume=${hdd_volume}` +
+                    `&monitor_enabled=${monitor_enabled}` +
+                    `&os=${os}`,
+                type: "PUT"
+            }).done(function (data) {
+                login = data;
+                location.href = "/"
+            })
+        }
+    </script>
+</head>
+<body>
+<button onclick="returnToMain()">Return</button>
+<br>
+<br>
+<div style="border-width: 3px;">
+    <h1>
+        New Virtual machine
+    </h1>
+</div>
+<div style="text-align: right">
+    <div id="username">Nonidentified user</div>
+    <button id="login_button" onclick="loginClick()">Login</button>
+    <script>
+        let value = document.getElementById("username").innerText;
+        console.log(value);
+        $.ajax({
+            url: "/get?name=logged_in",
+            type: "GET"
+        }).done(function (data) {
+            console.log(data);
+            if (data) {
+                $.ajax({
+                    url: "/get?name=login",
+                    type: "GET"
+                }).fail(function (data) {//too strange that is fails even status == 200 :/
+                    if (data.status === 200) {
+                        console.log(data);
+                        document.getElementById("username").innerText = data.responseText;
+                        document.getElementById("login_button").innerText = "Log out";
+                    }
+                });
+            }
+        });
+    </script>
+</div>
+<div style="margin-left: 12px">
+    <label for="vm_name">Name <input id="vm_name"></label>
+    <br>
+    <br>
+    <h4>CPU</h4>
+    <div id="cpu_div" style="margin-left: 12px">
+        <label for="cpu_vendor">vendor</label>
+        <select id="cpu_vendor">
+            <option value="intel">Intel</option>
+            <option value="amd">AMD</option>
+        </select>
+        <br>
+        <label for="cpu_freq">frequency</label>
+        <select id="cpu_freq">
+            <option value="100khz">1 KHz</option>
+            <option value="2mhz">2 MHz</option>
+            <option value="4.77mhz">4.77 MHz</option>
+            <option value="100mhz">100 MHz</option>
+            <option value="1ghz">1 GHz</option>
+            <option value="3ghz">3 GHz</option>
+            <option value="5.5ghz">5.5 GHz</option>
+            <option value="8.7ghz">8.732 GHz</option>
+        </select>
+        <br>
+        <label for="cpu_core_count">core count</label>
+        <select id="cpu_core_count">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="4">4</option>
+            <option value="16">16</option>
+            <option value="32">32</option>
+        </select>
+    </div>
+
+    <h4>RAM</h4>
+    <div id="ram_div" style="margin-left: 12px">
+        <label for="ram_volume">volume</label>
+        <input class="slider" id="ram_volume" max="100" min="1" type="range" value="2">
+        <span id="ram_volume_numeric">2GB</span>
+        <script>
+            const ramslider = document.getElementById("ram_volume");
+            const ramoutput = document.getElementById("ram_volume_numeric");
+            ramoutput.innerHTML = ramslider.value + " GB"; // Display the default slider value
+
+            // Update the current slider value (each time you drag the slider handle)
+            ramslider.oninput = function () {
+                ramoutput.innerHTML = this.value + " GB";
+            }
+        </script>
+    </div>
+    <h4>HDD</h4>
+    <div id="hdd_div" style="margin-left: 12px">
+        <label for="hdd_volume">volume</label>
+        <input class="slider" id="hdd_volume" max="1024" min="16" type="range" value="16">
+        <span id="hdd_volume_numeric">16 GB</span>
+        <script>
+            const hddslider = document.getElementById("hdd_volume");
+            const hddoutput = document.getElementById("hdd_volume_numeric");
+            hddoutput.innerHTML = hddslider.value + " GB"; // Display the default slider value
+
+            // Update the current slider value (each time you drag the slider handle)
+            hddslider.oninput = function () {
+                hddoutput.innerHTML = this.value + " GB";
+            }
+        </script>
+    </div>
+    <h4>
+        <label for="enable_monitor">Enable Monitor</label>
+        <input id="enable_monitor" type="checkbox" value="enable"><br>
+    </h4>
+    <h4>OS</h4>
+    <div id="os_div" style="margin-left: 12px">
+        <label for="os">Operating system</label>
+        <select id="os">
+            <option value="linux-ubuntu">Ubuntu</option>
+            <option value="linux-kubuntu">Kubuntu</option>
+            <option value="linux-arch">ArchLinux</option>
+            <option value="linux-debian">Debian</option>
+            <option value="linux-fedora">Fedora</option>
+            <option value="windows-2000">Windows 2000</option>
+            <option value="windows-XP">Windows XP</option>
+            <option value="windows-7">Windows 7</option>
+            <option value="windows-8">Windows 8</option>
+            <option value="windows-8.1">Windows 8.1</option>
+            <option value="windows-10">Windows 10</option>
+        </select>
+    </div>
+</div>
+<br>
+<div>
+    <button id="create_vm" onclick="order_vm()">Create VM</button>
+</div>
+</body>
+</html>

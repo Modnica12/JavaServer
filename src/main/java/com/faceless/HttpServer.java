@@ -54,7 +54,7 @@ public class HttpServer
 		mapper.registerHandler("/loginpage", new LoginPageHandler());
 		mapper.registerHandler("/vmorderpage", new OrderVMPageHandler());
 		mapper.registerHandler("/vmlookpage", new LookVMPageHandler());
-		mapper.registerHandler("/login", new LoginHandler());
+		mapper.registerHandler("/login", new AuthHandler());
 		mapper.registerHandler("/logout", new LogoutHandler());
 		mapper.registerHandler("/ordervm", new CreateVMHandler());
 		mapper.registerHandler("/myvms", new VmListHandler());

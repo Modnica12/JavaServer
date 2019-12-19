@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order VM</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        returnToMain = function () {
+            $.ajax({
+                url: "/",
+                type: "GET"
+            }).done(function () {
+                location.href = "/"
+            })
+        };
+
+        edit_vm = function (entry_number) {
+
+        };
+
+        remove_vm = function (entry_number) {
+            $.ajax({
+                url: "/removevm?login=" + document.getElementById('username').innerText + "&index=" + entry_number,
+                type: "DELETE"
+            }).done(function () {
+                location.reload();
+            }).always(function (data) {
+                console.log(data)
+            });
+        };
+
+        load_table = function (username) {
+            $.ajax({
+                url: "/myvms?login=" + username,
+                type: "GET"
+            }).done(function (data) {
+                const table = document.getElementById('vms');
+                table.insertAdjacentHTML("beforeend", data);
+            })
+        };
+    </script>
+    <style>
+        table {
+            border: 1px solid black;
+            border-collapse: separate !important;
+            border-radius: 6px;
+            -moz-border-radius: 6px;
+        }
+
+        td, th {
+            border-left: solid black 1px;
+            border-top: solid black 1px;
+        }
+
+        td:first-child, th:first-child {
+            border-left: none;
+        }
+
+    </style>
+</head>
+<body>
+<button onclick="returnToMain()">Return</button>
+<br>
+<br>
+<div style="border-width: 3px;">
+    <h1>
+        My VMs
+    </h1>
+</div>
+<div style="text-align: right">
+    <div id="username">Nonidentified user</div>
+    <button id="login_button" onclick="loginClick()">Login</button>
+    <script>
+        let username = "undefined";
+        let value = document.getElementById("username").innerText;
+        console.log(value);
+        $.ajax({
+            url: "/get?name=logged_in",
+            type: "GET"
+        }).done(function (data) {
+            // console.log(data);
+            if (data) {
+                $.ajax({
+                    url: "/get?name=login",
+                    type: "GET"
+                }).fail(function (data) {//too strange that is fails even status == 200 :/
+                    if (data.status === 200) {
+                        // console.log(data);
+                        username = data.responseText;
+                        document.getElementById("username").innerText = data.responseText;
+                        document.getElementById("login_button").innerText = "Log out";
+
+                        load_table(username)
+                    }
+                });
+            }
+        });
+    </script>
+</div>
+
+<table id="vms">
+    <tr>
+        <th>№</th>
+        <th>Name</th>
+        <th>CPU Vendor</th>
+        <th>CPU Frequency</th>
+        <th>CPU Core count</th>
+        <th>RAM volume</th>
+        <th>HDD volume</th>
+        <th>Enable Monitor</th>
+        <th>Operating System</th>
+        <th>Edit</th>
+        <th>Remove</th>
+    </tr>
+</table>
+
+<div style="margin-left: 12px; border-bottom: 0">
+</div>
+<br>
+<div>
+    <!-- TODO -->
+    <br>
+    <!-- TODO -->
+</div>
+</body>
+</html>
